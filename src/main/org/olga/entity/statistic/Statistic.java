@@ -1,21 +1,18 @@
 package org.olga.entity.statistic;
 
+import org.olga.entity.Entity;
 import org.olga.entity.film.Film;
 
 import java.util.List;
 
-public interface Statistic {
-    int getId();
+public interface Statistic extends Entity {
+    double getBudget();
 
-    void setId(int id);
+    void setBudget(double budget);
 
-    int getBudget();
+    double getBoxOffice();
 
-    void setBudget(int budget);
-
-    int getBoxOffice();
-
-    void setBoxOffice(int boxOffice);
+    void setBoxOffice(double boxOffice);
 
     List<Film> getFilmList();
 

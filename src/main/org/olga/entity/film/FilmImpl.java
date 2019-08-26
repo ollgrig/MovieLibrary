@@ -5,32 +5,38 @@ import org.olga.entity.fact.Fact;
 
 import java.util.List;
 
-public class FilmImpl extends EntityImpl {
-    private int id;
+public class FilmImpl extends EntityImpl implements Film {
+    private long id;
     private String name;
-    private int statisticId;
+    private long statisticId;
     private List<Fact> factList;
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getStatisticId() {
+    @Override
+    public long getStatisticId() {
         return statisticId;
     }
 
-    public void setStatisticId(int statisticId) {
+    @Override
+    public void setStatisticId(long statisticId) {
         this.statisticId = statisticId;
     }
 
+    @Override
     public List<Fact> getFactList() {
         return factList;
     }
 
+    @Override
     public void setFactList(List<Fact> factList) {
         this.factList = factList;
     }

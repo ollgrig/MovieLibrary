@@ -10,9 +10,9 @@ public interface Film extends Entity {
 
     void setName(String name);
 
-    int getStatisticId();
+    long getStatisticId();
 
-    void setStatisticId(int statisticId);
+    void setStatisticId(long statisticId);
 
     List<Fact> getFactList();
 

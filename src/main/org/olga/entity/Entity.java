@@ -2,7 +2,7 @@ package org.olga.entity;
 
 public interface Entity {
 
-    int getId();
+    long getId();
 
-    void setId(int id);
+    void setId(long id);
 }

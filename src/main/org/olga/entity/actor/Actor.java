@@ -1,10 +1,8 @@
-package entity.actor;
+package org.olga.entity.actor;
 
-public interface Actor {
-    int getId();
+import org.olga.entity.Entity;
 
-    void setId(int id);
-
+public interface Actor extends Entity {
     String getName();
 
     void setName(String name);

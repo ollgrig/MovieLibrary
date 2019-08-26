@@ -1,17 +1,11 @@
-package entity.actor;
+package org.olga.entity.actor;
 
-public class ActorImpl implements Actor {
+import org.olga.entity.EntityImpl;
+
+public class ActorImpl extends EntityImpl {
     private int id;
     private String name;
     private String surname;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

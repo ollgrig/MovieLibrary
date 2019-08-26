@@ -1,23 +1,15 @@
-package entity.film;
+package org.olga.entity.film;
 
-import entity.fact.Fact;
+import org.olga.entity.EntityImpl;
+import org.olga.entity.fact.Fact;
 
 import java.util.List;
 
-public class FilmImpl implements Film {
+public class FilmImpl extends EntityImpl {
     private int id;
     private String name;
     private int statisticId;
     private List<Fact> factList;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

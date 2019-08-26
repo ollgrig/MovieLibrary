@@ -1,6 +1,6 @@
-package entity.statistic;
+package org.olga.entity.statistic;
 
-import entity.film.Film;
+import org.olga.entity.film.Film;
 
 import java.util.List;
 

@@ -1,14 +1,11 @@
-package entity.film;
+package org.olga.entity.film;
 
-import entity.fact.Fact;
+import org.olga.entity.Entity;
+import org.olga.entity.fact.Fact;
 
 import java.util.List;
 
-public interface Film {
-    int getId();
-
-    void setId(int id);
-
+public interface Film extends Entity {
     String getName();
 
     void setName(String name);

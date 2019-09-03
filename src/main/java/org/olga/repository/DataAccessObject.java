@@ -8,7 +8,7 @@ import java.util.List;
 public interface DataAccessObject<T extends Entity> {
    Connection getConnection();
 
-   void getDefaultConnection();
+   Connection getDefaultConnection();
 
     T getById(long id);
 
@@ -18,5 +18,5 @@ public interface DataAccessObject<T extends Entity> {
 
     T update(T t);
 
-    void delete(long id);
+    boolean delete(long id);
 }

@@ -6,4 +6,11 @@ public class FilmConstant {
     public static final String SELECT_ALL_FILM = "SELECT id, name, statistic_id FROM film";
     public static final String UPDATE_FILM = "UPDATE film SET name = ?, statistic_id = ? WHERE ID = ?";
     public static final String DELETE_FILM = "DELETE FROM film WHERE ID = ?";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_STATISTIC_ID = "statistic_id";
+
+    private FilmConstant() {
+        throw new IllegalArgumentException("Should not be instantiated");
+    }
 }

@@ -2,8 +2,9 @@ package org.olga.entity.actor;
 
 import org.olga.entity.EntityImpl;
 
+import java.util.Objects;
+
 public class ActorImpl extends EntityImpl implements Actor {
-    private long id;
     private String name;
     private String surname;
 
@@ -17,6 +18,7 @@ public class ActorImpl extends EntityImpl implements Actor {
         this.name = name;
     }
 
+
     @Override
     public String getSurname() {
         return surname;
@@ -25,5 +27,27 @@ public class ActorImpl extends EntityImpl implements Actor {
     @Override
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public String toString() {
+        return "ActorImpl{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ActorImpl actor = (ActorImpl) o;
+        return Objects.equals(name, actor.name) &&
+                Objects.equals(surname, actor.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname);
     }
 }

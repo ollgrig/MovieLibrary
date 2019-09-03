@@ -3,7 +3,7 @@ package org.olga.repository.film;
 import org.olga.constant.film.FilmConstant;
 import org.olga.entity.film.Film;
 import org.olga.entity.film.FilmImpl;
-import org.olga.repository.DBConnectionManager;
+import org.olga.repository.connection.DBConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,34 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilmDAOImpl implements FilmDAO {
-    private Connection connection = null;
+    private Connection connection;
 
     @Override
-    public Connection getConnection() {
+    public synchronized Connection getConnection() {
         if (connection == null) {
-            getDefaultConnection();
+            connection = getDefaultConnection();
         }
         return connection;
     }
 
     @Override
-    public synchronized void getDefaultConnection() {
+    public synchronized Connection getDefaultConnection() {
         try {
-            new DBConnectionManager("localhost:3306", "db", "root", "1234").getConnection();
+            return new DBConnectionManager().getConnection();
         } catch (SQLException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
-    public FilmDAOImpl() {
-    }
-
-    public Film getFromRS(ResultSet rs) {
+    private Film getFromRS(ResultSet rs) {
         Film film = new FilmImpl();
         try {
-            film.setId(rs.getLong("id"));
-            film.setName(rs.getString("name"));
-            film.setStatisticId(rs.getLong("statistic_id"));
+            film.setId(rs.getLong(FilmConstant.COLUMN_ID));
+            film.setName(rs.getString(FilmConstant.COLUMN_NAME));
+            film.setStatisticId(rs.getLong(FilmConstant.COLUMN_STATISTIC_ID));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -50,8 +48,7 @@ public class FilmDAOImpl implements FilmDAO {
     @Override
     public Film getById(long id) {
         Film film = null;
-        //todo
-        try (PreparedStatement statement = this.getConnection().prepareStatement(FilmConstant.SELECT_FILM_BY_ID)) {
+        try (PreparedStatement statement = getConnection().prepareStatement(FilmConstant.SELECT_FILM_BY_ID)) {
             statement.setLong(1, id);
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
@@ -67,11 +64,10 @@ public class FilmDAOImpl implements FilmDAO {
     @Override
     public List<Film> getAll() {
         List<Film> filmList = new ArrayList<>();
-        try (PreparedStatement statement = getConnection().prepareStatement(FilmConstant.SELECT_ALL_FILM)) {
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    filmList.add(getFromRS(rs));
-                }
+        try (PreparedStatement statement = getConnection().prepareStatement(FilmConstant.SELECT_ALL_FILM);
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                filmList.add(getFromRS(rs));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -89,7 +85,7 @@ public class FilmDAOImpl implements FilmDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return film;
+        return getById(film.getId());
     }
 
     @Override
@@ -99,19 +95,23 @@ public class FilmDAOImpl implements FilmDAO {
             statement.setLong(2, film.getStatisticId());
             statement.setLong(3, film.getId());
             statement.execute();
+            return getById(film.getId());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return null;
         }
-        return null;
+
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
         try (PreparedStatement statement = getConnection().prepareStatement(FilmConstant.DELETE_FILM)) {
             statement.setLong(1, id);
             statement.execute();
+            return (getById(id) == null);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         }
     }
 }

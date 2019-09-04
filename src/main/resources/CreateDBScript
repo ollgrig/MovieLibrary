@@ -1,0 +1,44 @@
+DROP TABLE IF EXISTS actor, statistic, studio, film, fact, role_name;
+
+DROP TABLE IF EXISTS actor;
+CREATE TABLE actor(
+id INTEGER(10) NOT NULL,
+name VARCHAR(255),
+surname VARCHAR(255),
+PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS statistic;
+CREATE TABLE statistic(
+id INTEGER(10) NOT NULL ,
+budget INTEGER(15),
+box_office INTEGER(15),
+PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS film;
+CREATE TABLE film(
+id INTEGER(10) NOT NULL,
+name VARCHAR(255),
+statistic_id INTEGER(10) NOT NULL,
+PRIMARY KEY(id),
+FOREIGN KEY(statistic_id) REFERENCES statistic(id)
+);
+
+DROP TABLE IF EXISTS fact;
+CREATE TABLE fact(
+id INTEGER(10) NOT NULL,
+fact_text VARCHAR(255),
+film_id INTEGER(10) NOT NULL,
+PRIMARY KEY(id),
+FOREIGN KEY(film_id) REFERENCES film(id)
+);
+
+DROP TABLE IF EXISTS role_name;
+CREATE TABLE role_name(
+film_id INTEGER(10) NOT NULL,
+actor_id INTEGER(10) NOT NULL,
+PRIMARY KEY (film_id, actor_id),
+FOREIGN KEY(film_id) REFERENCES film(id),
+FOREIGN KEY(actor_id) REFERENCES actor(id)
+);

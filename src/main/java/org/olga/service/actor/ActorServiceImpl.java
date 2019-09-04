@@ -6,38 +6,51 @@ import org.olga.repository.factory.DAOFactory;
 
 import java.util.List;
 
-public class ActorServiceImpl implements ActorService{
-    private ActorDAO actorDAO = DAOFactory.getDAO(ActorDAO.class);
+import static java.util.Objects.isNull;
+
+public class ActorServiceImpl implements ActorService {
+    private ActorDAO actorDAO;
+
+    ActorDAO getActorDAO() {
+        if (isNull(actorDAO)) {
+            actorDAO = DAOFactory.getDAO(ActorDAO.class);
+        }
+        return actorDAO;
+    }
+
     @Override
     public Actor getActorById(long id) {
-        return actorDAO.getById(id);
+        return getActorDAO().getById(id);
     }
 
     @Override
     public List<Actor> getAllActors() {
-        return actorDAO.getAll();
+        return getActorDAO().getAll();
     }
 
     @Override
     public Actor update(Actor actor) {
         Actor actorEntity = getActorById(actor.getId());
-        if(actor.equals(actorEntity)){
+        if (actor.equals(actorEntity)) {
             return actorEntity;
-        }else {
-            actorEntity.setName(actor.getName());
-            actorEntity.setSurname(actor.getSurname());
-            // end logic of converter
-            return actorDAO.update(actorEntity);
+        } else {
+            return getActorDAO().update(converter(actor, actorEntity));
         }
+    }
+
+    Actor converter(Actor actor, Actor actorEntity) {
+        actorEntity.setName(actor.getName());
+        actorEntity.setSurname(actor.getSurname());
+        return actorEntity;
     }
 
     @Override
     public Actor create(Actor actor) {
-        return actorDAO.create(actor);
+        return getActorDAO().create(actor);
     }
 
     @Override
     public void delete(long id) {
-        System.out.println(actorDAO.delete(id)? "Deleted" : "Error");
+        System.out.println(getActorDAO().delete(id) ? "Deleted" : "Error");
     }
 }

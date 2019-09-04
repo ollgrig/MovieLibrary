@@ -11,14 +11,21 @@ import static java.util.Objects.isNull;
 public class FilmServiceImpl implements FilmService {
     private FilmDAO filmDAO;
 
+    FilmDAO getFilmDAO() {
+        if (isNull(filmDAO)) {
+            filmDAO = DAOFactory.getDAO(FilmDAO.class);
+        }
+        return filmDAO;
+    }
+
     @Override
     public Film getFilmById(long id) {
-        return filmDAO.getById(id);
+        return getFilmDAO().getById(id);
     }
 
     @Override
     public List<Film> getAllFilms() {
-        return filmDAO.getAll();
+        return getFilmDAO().getAll();
     }
 
     @Override
@@ -27,29 +34,25 @@ public class FilmServiceImpl implements FilmService {
         if (film.equals(filmEntity)) {
             return filmEntity;
         } else {
-            // begin the logic of converter normally
-            filmEntity.setName(film.getName());
-            filmEntity.setStatisticId(film.getStatisticId());
-            filmEntity.setFactList(film.getFactList());
-            // end logic of converter
-            return getFilmDao().update(filmEntity);
+            return getFilmDAO().update(converter(film,filmEntity));
         }
+    }
+    Film converter(Film film, Film filmEntity){
+        filmEntity.setName(film.getName());
+        filmEntity.setStatisticId(film.getStatisticId());
+        filmEntity.setFactList(film.getFactList());
+        return filmEntity;
     }
 
     @Override
     public Film create(Film film) {
-        return filmDAO.create(film);
+        return getFilmDAO().create(film);
     }
 
     @Override
     public void delete(long id) {
-        System.out.println(filmDAO.delete(id)? "Deleted" : "Error");
+        System.out.println(getFilmDAO().delete(id) ? "Deleted" : "Error");
     }
 
-    FilmDAO getFilmDao() {
-        if (isNull(filmDAO)) {
-            filmDAO = DAOFactory.getDAO(FilmDAO.class);
-        }
-        return filmDAO;
-    }
+
 }

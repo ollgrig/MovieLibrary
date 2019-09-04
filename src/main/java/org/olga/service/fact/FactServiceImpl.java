@@ -8,16 +8,26 @@ import org.olga.service.film.FilmService;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 public class FactServiceImpl implements FactService {
-    private FactDAO factDAO = DAOFactory.getDAO(FactDAO.class);
+    private FactDAO factDAO;
+
+    FactDAO getFactDAO() {
+        if (isNull(factDAO)) {
+            factDAO = DAOFactory.getDAO(FactDAO.class);
+        }
+        return factDAO;
+    }
+
     @Override
     public Fact getFactById(long id) {
-        return factDAO.getById(id);
+        return getFactDAO().getById(id);
     }
 
     @Override
     public List<Fact> getAllFacts() {
-        return factDAO.getAll();
+        return getFactDAO().getAll();
     }
 
     @Override
@@ -26,20 +36,22 @@ public class FactServiceImpl implements FactService {
         if (fact.equals(factEntity)) {
             return factEntity;
         } else {
-            // begin the logic of converter normally
-            factEntity.setFactText(fact.getFactText());
-            // end logic of converter
-            return factDAO.update(factEntity);
+            return getFactDAO().update(converter(fact, factEntity));
         }
+    }
+
+    Fact converter(Fact fact, Fact factEntity) {
+        factEntity.setFactText(fact.getFactText());
+        return factEntity;
     }
 
     @Override
     public Fact create(Fact fact) {
-        return factDAO.create(fact);
+        return getFactDAO().create(fact);
     }
 
     @Override
     public void delete(long id) {
-        System.out.println(factDAO.delete(id)? "Deleted" : "Error");
+        System.out.println(getFactDAO().delete(id) ? "Deleted" : "Error");
     }
 }

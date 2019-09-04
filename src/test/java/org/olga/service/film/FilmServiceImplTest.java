@@ -54,7 +54,7 @@ public class FilmServiceImplTest {
         filmFromDB.setName("old name");
         when(filmService.getFilmById(DEFAULT_ID)).thenReturn(filmFromDB);
         when(filmService.update(any(Film.class))).thenCallRealMethod();
-        when(filmService.getFilmDao()).thenReturn(filmDAO);
+        when(filmService.getFilmDAO()).thenReturn(filmDAO);
         when(filmDAO.update(filmFromDB)).thenReturn(filmFromDB);
 
         Film result = filmService.update(film);

@@ -1,5 +1,6 @@
 package org.olga.main;
 
+import org.hamcrest.core.IsNull;
 import org.olga.entity.actor.Actor;
 import org.olga.entity.actor.ActorImpl;
 import org.olga.entity.fact.Fact;
@@ -20,6 +21,7 @@ import org.olga.service.statistic.StatisticServiceImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,18 +33,20 @@ public class MovieLibrary {
         while (true) {
             try {
                 String lineFromConsole = bufferedReader.readLine();
-                String[] arrayFromConsole = lineFromConsole.split("//s");
+                String[] arrayFromConsole = lineFromConsole.split(" ");
                 if (arrayFromConsole[0].equals("actor")) {
-                    if (arrayFromConsole[1].equals("getById")) {
+                    if (arrayFromConsole.length == 1) {
+                        System.out.println("Wrong action");
+                        System.out.println("****************************************************************");
+                    } else if (arrayFromConsole[1].equals("getById")) {
                         ActorService actorService = new ActorServiceImpl();
                         System.out.println("Actor with id:" + arrayFromConsole[2]);
                         System.out.println(actorService.getActorById(Long.parseLong(arrayFromConsole[2])));
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("getAll")) {
                         ActorService actorService = new ActorServiceImpl();
-                        for (Actor actor : actorService.getAllActors()) {
-                            System.out.println(actor);
-                        }
+                        actorService.getAllActors()
+                                .forEach(System.out::println);
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("create")) {
                         ActorService actorService = new ActorServiceImpl();
@@ -71,16 +75,18 @@ public class MovieLibrary {
                         System.out.println("****************************************************************");
                     }
                 } else if (arrayFromConsole[0].equals("fact")) {
-                    if (arrayFromConsole[1].equals("getById")) {
+                    if (arrayFromConsole.length == 1) {
+                        System.out.println("Wrong action");
+                        System.out.println("****************************************************************");
+                    } else if (arrayFromConsole[1].equals("getById")) {
                         FactService factService = new FactServiceImpl();
                         System.out.println("Fact with id:" + arrayFromConsole[2]);
                         System.out.println(factService.getFactById(Long.parseLong(arrayFromConsole[2])));
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("getAll")) {
                         FactService factService = new FactServiceImpl();
-                        for (Fact fact : factService.getAllFacts()) {
-                            System.out.println(fact);
-                        }
+                        factService.getAllFacts()
+                                .forEach(System.out::println);
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("create")) {
                         FactService factService = new FactServiceImpl();
@@ -107,16 +113,18 @@ public class MovieLibrary {
                         System.out.println("****************************************************************");
                     }
                 } else if (arrayFromConsole[0].equals("film")) {
-                    if (arrayFromConsole[1].equals("getById")) {
+                    if (arrayFromConsole.length == 1) {
+                        System.out.println("Wrong action");
+                        System.out.println("****************************************************************");
+                    } else if (arrayFromConsole[1].equals("getById")) {
                         FilmService filmService = new FilmServiceImpl();
                         System.out.println("Film with id:" + arrayFromConsole[2]);
                         System.out.println(filmService.getFilmById(Long.parseLong(arrayFromConsole[2])));
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("getAll")) {
                         FilmService filmService = new FilmServiceImpl();
-                        for (Film film : filmService.getAllFilms()) {
-                            System.out.println(film);
-                        }
+                        filmService.getAllFilms()
+                                .forEach(System.out::println);
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("create")) {
                         FilmService filmService = new FilmServiceImpl();
@@ -134,7 +142,7 @@ public class MovieLibrary {
                         film.setName(arrayFromConsole[3]);
                         film.setStatisticId(Long.parseLong(arrayFromConsole[4]));
                         System.out.println("Updated film:");
-                        System.out.println(filmService.create(film));
+                        System.out.println(filmService.update(film));
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("delete")) {
                         FilmService filmService = new FilmServiceImpl();
@@ -145,16 +153,18 @@ public class MovieLibrary {
                         System.out.println("****************************************************************");
                     }
                 } else if (arrayFromConsole[0].equals("statistic")) {
-                    if (arrayFromConsole[1].equals("getById")) {
+                    if (arrayFromConsole.length == 1) {
+                        System.out.println("Wrong action");
+                        System.out.println("****************************************************************");
+                    } else if (arrayFromConsole[1].equals("getById")) {
                         StatisticService statisticService = new StatisticServiceImpl();
                         System.out.println("Statistic with id:" + arrayFromConsole[2]);
                         System.out.println(statisticService.getStatisticById(Long.parseLong(arrayFromConsole[2])));
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("getAll")) {
                         StatisticService statisticService = new StatisticServiceImpl();
-                        for (Statistic statistic : statisticService.getAllStatistics()) {
-                            System.out.println(statistic);
-                        }
+                        statisticService.getAllStatistics()
+                                .forEach(System.out::println);
                         System.out.println("****************************************************************");
                     } else if (arrayFromConsole[1].equals("create")) {
                         StatisticService statisticService = new StatisticServiceImpl();
@@ -184,38 +194,13 @@ public class MovieLibrary {
                     }
                 } else if (arrayFromConsole[0].equals("break")) {
                     break;
+                } else {
+                    System.out.println("Wrong action");
+                    System.out.println("****************************************************************");
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
-       /* FilmService filmService = new FilmServiceImpl();
-        //////read by id///////////
-        System.out.println(filmService.getFilmById(0).getName());
-        //////read all///////////
-        for (Film film : filmService.getAllFilms()) {
-            System.out.println(film.getName());
-        }
-        //////update///////////
-        Film film = new FilmImpl();
-        film.setId(0);
-        film.setName("Film1");
-        filmService.update(film);
-        for (Film f : filmService.getAllFilms()) {
-            System.out.println(f.getName());
-        }
-        //////create///////////
-        /*Film film2 = new FilmImpl();
-        film2.setId(1);
-        film2.setName("Film2");
-        filmService.create(film2);
-        for (Film f : filmService.getAllFilms()) {
-            System.out.println(f.getName());
-        }
-        //////delete///////////
-        filmService.delete(1);
-        for (Film f : filmService.getAllFilms()) {
-            System.out.println(f.getName());
-        }*/
     }
 }

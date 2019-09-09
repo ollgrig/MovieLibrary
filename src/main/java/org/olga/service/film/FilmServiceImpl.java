@@ -38,7 +38,7 @@ public class FilmServiceImpl implements FilmService {
         }
     }
 
-    Film convert(Film film, Film filmEntity) {
+    private Film convert(Film film, Film filmEntity) {
         filmEntity.setName(film.getName());
         filmEntity.setStatisticId(film.getStatisticId());
         filmEntity.setFactList(film.getFactList());

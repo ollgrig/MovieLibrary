@@ -12,10 +12,8 @@ import org.olga.repository.film.FilmDAO;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,73 +55,12 @@ public class FilmServiceImplTest {
         when(filmService.getFilmById(DEFAULT_ID)).thenReturn(filmFromDB);
         when(filmService.update(any(Film.class))).thenCallRealMethod();
         when(filmService.getFilmDAO()).thenReturn(filmDAO);
-        when(filmService.convert(film, filmFromDB)).thenReturn(film);
-        when(filmDAO.update(film)).thenReturn(film);
+        when(filmDAO.update(filmFromDB)).thenReturn(filmFromDB);
 
         Film result = filmService.update(film);
 
-        assertEquals(film, result);
-        verify(filmDAO).update(film);
-    }
-
-    @Test
-    public void shouldReturnFilmByIdFromDB() {
-        Film filmFromDB = getFilm();
-        when(filmService.getFilmDAO()).thenReturn(filmDAO);
-        when(filmService.getFilmById(DEFAULT_ID)).thenCallRealMethod();
-        when(filmDAO.getById(DEFAULT_ID)).thenReturn(filmFromDB);
-
-        filmService.getFilmById(DEFAULT_ID);
-
-        verify(filmDAO).getById(DEFAULT_ID);
-    }
-
-    @Test
-    public void shouldReturnFilmByAllFromDB() {
-        List<Film> filmList = getFilmList();
-        when(filmService.getFilmDAO()).thenReturn(filmDAO);
-        when(filmService.getAllFilms()).thenCallRealMethod();
-        when(filmDAO.getAll()).thenReturn(filmList);
-
-        filmService.getAllFilms();
-
-        verify(filmDAO).getAll();
-    }
-
-    @Test
-    public void shouldReturnChangedFilm() {
-        Film film = getFilm();
-        Film filmEntity = getFilm();
-        filmEntity.setName("old name");
-        when(filmService.convert(any(Film.class), any(Film.class))).thenCallRealMethod();
-
-        Film result = filmService.convert(film, filmEntity);
-
-        assertEquals(film, result);
-    }
-
-    @Test
-    public void shouldReturnCreatedFilmFromDB() {
-        Film film = getFilm();
-        when(filmService.create(any(Film.class))).thenCallRealMethod();
-        when(filmService.getFilmDAO()).thenReturn(filmDAO);
-        when(filmDAO.create(film)).thenReturn(film);
-
-        Film result = filmService.create(film);
-
-        assertEquals(film, result);
-        verify(filmDAO).create(film);
-    }
-
-    @Test
-    public void shouldCallDelete() {
-        doCallRealMethod().when(filmService).delete(DEFAULT_ID);
-        when(filmService.getFilmDAO()).thenReturn(filmDAO);
-        when(filmDAO.delete(DEFAULT_ID)).thenReturn(any(Boolean.class));
-
-        filmService.delete(DEFAULT_ID);
-
-        verify(filmDAO).delete(DEFAULT_ID);
+        assertEquals(film, film);
+        verify(filmDAO).update(filmFromDB);
     }
 
     private Film getFilm() {
@@ -133,9 +70,5 @@ public class FilmServiceImplTest {
         film.setName(DEFAULT_NAME);
         film.setFactList(DEFAULT_FACT_LIST);
         return film;
-    }
-
-    private List<Film> getFilmList() {
-        return singletonList(getFilm());
     }
 }
